@@ -3,6 +3,9 @@ import os
 from datetime import date
 from discord.ext import commands
 
+from dotenv import load_dotenv
+load_dotenv()
+
 intents = discord.Intents.default()
 intents.members = True
 

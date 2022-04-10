@@ -2,6 +2,9 @@ import sqlite3
 import random
 import string
 
+from dotenv import load_dotenv
+load_dotenv()
+
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
 cur = con.cursor()
@@ -39,7 +42,6 @@ import io
 
 bot = commands.Bot(command_prefix="!")
 TOKEN = os.getenv("DISCORD_TOKEN")
-TIDY = False
 
 @bot.event
 async def on_ready():
