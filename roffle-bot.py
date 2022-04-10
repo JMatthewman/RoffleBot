@@ -10,7 +10,6 @@ con.row_factory = sqlite3.Row
 cur = con.cursor()
 
 def claimTicket(code, userID):
-  userID = str(userID)
   cur.execute('SELECT COUNT(*) AS count FROM tickets WHERE code = ?', [code])
   ticketCount = cur.fetchone()
   if ticketCount['count'] == 0:
@@ -93,10 +92,10 @@ async def create_error(ctx, error):
 
 @bot.command()
 async def claim(ctx, code):
-  print(f"Received claim request from {ctx.author}")
-  response = claimTicket(code, ctx.author)
   reply = await ctx.reply(response + ' Self destructing in 10 seconds.')
-  print(f"Processed claim request from {ctx.author}")
+  print(f"Received claim request from {ctx.author} ({ctx.author.id})")
+  response = claimTicket(code, ctx.author.id)
+  print(f"Processed claim request from {ctx.author} ({ctx.author.id})")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
