@@ -8,7 +8,6 @@ intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 TOKEN = os.getenv("DISCORD_TOKEN")
-TOKEN = '<REDACTED>'
 
 @bot.event
 async def on_ready():

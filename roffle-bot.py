@@ -38,8 +38,7 @@ import io
 #import time
 
 bot = commands.Bot(command_prefix="!")
-#TOKEN = os.getenv("DISCORD_TOKEN")
-TOKEN = '<REDACTED>'
+TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = False
 
 @bot.event
