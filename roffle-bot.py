@@ -41,7 +41,7 @@ import io
 #import time
 
 bot = commands.Bot(command_prefix="!")
-TOKEN = os.getenv("DISCORD_TOKEN")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 @bot.event
 async def on_ready():
@@ -103,4 +103,4 @@ async def claim(ctx, code):
 
 
 if __name__ == "__main__":
-  bot.run(TOKEN)
+  bot.run(DISCORD_TOKEN)

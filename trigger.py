@@ -10,7 +10,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
-TOKEN = os.getenv("DISCORD_TOKEN")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
 @bot.event
 async def on_ready():
@@ -28,4 +28,4 @@ async def trigger(ctx):
     await ctx.author.send(f"<@{user.id}> is a muppet.")
 
 if __name__ == "__main__":
-    bot.run(TOKEN)
+    bot.run(DISCORD_TOKEN)
