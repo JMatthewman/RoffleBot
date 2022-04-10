@@ -41,7 +41,7 @@ import io
 
 bot = commands.Bot(command_prefix="!")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-TIDY = os.getenv("TIDY")
+TIDY = os.getenv("TIDY") == "True"
 
 @bot.event
 async def on_ready():
