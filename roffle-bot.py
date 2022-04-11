@@ -108,6 +108,7 @@ async def addMulti(ctx, code, *args):
 
 
 @bot.command()
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
@@ -126,6 +127,11 @@ async def claim(ctx, code):
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
+@claim.error
+async def claim_error(ctx, error):
+  if isinstance(error, commands.CommandOnCooldown):
+    ratelimit_embed = discord.Embed(title=f"Slow it down!",description=f"Try again in {error.retry_after:.2f}s.", colour=discord.colour.red())
+    await ctx.send(embed=ratelimit_embed)
 
 @bot.command()
 @commands.is_owner()
