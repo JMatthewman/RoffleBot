@@ -101,6 +101,16 @@ async def claim(ctx, code):
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
 
+@bot.command()
+@commands.is_owner()
+async def ping(ctx):
+  await ctx.reply("Pong!")
+
+@bot.command()
+@commands.is_owner()
+async def quit(ctx):
+  await ctx.reply("Exiting script, Goodbye!")
+  exit()
 
 if __name__ == "__main__":
   bot.run(DISCORD_TOKEN)
