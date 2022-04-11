@@ -165,12 +165,12 @@ async def claim_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.is_owner()
+@commands.has_role("Roffle Admin")
 async def ping(ctx):
   await ctx.reply("Pong!")
 
 @bot.command()
-@commands.is_owner()
+@commands.has_role("Roffle Admin")
 async def quit(ctx):
   await ctx.reply("Exiting script, Goodbye!")
   await bot.close()
