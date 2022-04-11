@@ -107,7 +107,7 @@ async def addMulti(ctx, code, source):
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   response = claimTicket(code, ctx.author)
-  reply = await ctx.reply(response + {tidySuffix})
+  reply = await ctx.reply(response + tidySuffix)
   print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   if TIDY:
     await ctx.message.delete(delay=10)
