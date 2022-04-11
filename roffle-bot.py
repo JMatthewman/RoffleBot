@@ -114,7 +114,8 @@ async def claim(ctx, code):
   user_roles = set([role.name for role in ctx.author.roles])
   disqualifications = user_roles.intersection(banned_roles)
   if len(disqualifications) > 0:
-    reply = await ctx.reply(f"Sorry, {random.choice(list(disqualifications))}s are not allowed to enter the raffle.{tidySuffix}")
+    #reply = await ctx.reply(f"Sorry, {random.choice(list(disqualifications))}s are not allowed to enter the raffle.{tidySuffix}")
+    reply = await ctx.reply(f"Sorry, staff / volunteers are not allowed to enter the raffle.{tidySuffix}")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
