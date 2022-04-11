@@ -131,7 +131,7 @@ async def claim(ctx, code):
 async def claim_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     ratelimit_embed = discord.Embed(title=f"Slow it down!",description=f"Try again in {error.retry_after:.2f}s.", colour=discord.Colour.red())
-    await ctx.send(embed=ratelimit_embed)
+    await ctx.reply(embed=ratelimit_embed)
 
 @bot.command()
 @commands.is_owner()
