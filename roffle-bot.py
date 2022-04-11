@@ -17,6 +17,7 @@ if TIDY:
   tidySuffix = " (This message will self-destruct in 10 seconds)"
 else:
   tidySuffix = ""
+banned_roles = set(os.getenv("BANNED_ROLES").split(','))
 
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
@@ -109,12 +110,20 @@ async def addMulti(ctx, code, *args):
 @bot.command()
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
-  response = claimTicket(code, ctx.author)
-  reply = await ctx.reply(response + tidySuffix)
-  print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
-  if TIDY:
-    await ctx.message.delete(delay=10)
-    await reply.delete(delay=10)
+
+  disqualifications = set(ctx.author.roles).intersection(banned_roles)
+  if len(disqualifications) > 0:
+    reply = await ctx.reply("Sorry, {random.choice(disqualifications)}s are not allowed to enter the raffle.{tidySuffix}")
+    if TIDY:
+      await ctx.message.delete(delay=10)
+      await reply.delete(delay=10)
+  else:
+    response = claimTicket(code, ctx.author)
+    reply = await ctx.reply(response + tidySuffix)
+    print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
+    if TIDY:
+      await ctx.message.delete(delay=10)
+      await reply.delete(delay=10)
 
 @bot.command()
 @commands.is_owner()
