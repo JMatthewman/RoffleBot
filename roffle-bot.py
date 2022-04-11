@@ -23,7 +23,33 @@ con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
 cur = con.cursor()
 
+def createMultiList():
+  global multi  
+  cur.execute("""SELECT code FROM claims WHERE claims.multi_use = 1""")
+  multi = cur.fetchall()
+              
+def validate(code):
+  try:
+    multi
+  except:
+    createMultiList() 
+
+  if code in multi: 
+    return True 
+
+  first = int(code[0])
+  second = int(code[1])
+  final = int(code[-2:])
+  return (first * second) + final == 68
+
+    
+
 def claimTicket(code, user):
+  
+  ## Check if the code is in the MultiList or is valid.
+  if validate(code) == False:
+    return f"Sorry that code isn't a valid ticket"
+  
   cur.execute('SELECT *, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS claims, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id AND claims.user_id = :user_id) AS my_claims FROM tickets WHERE code = :code', {"user_id": user.id, "code": code})
   tickets = cur.fetchall()
   if len(tickets) == 0:
