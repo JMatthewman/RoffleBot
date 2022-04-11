@@ -1,9 +1,20 @@
 import sqlite3
 import random
 import string
+import os
+import discord
+from discord.ext import commands
+import csv
+import io
 
 from dotenv import load_dotenv
 load_dotenv()
+
+bot = commands.Bot(command_prefix="!")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+TIDY = os.getenv("TIDY") == "True"
+if TIDY:
+  tidySuffix = " (This message will self-destruct in 10 seconds)"
 
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
@@ -31,20 +42,6 @@ def claimTicket(code, user):
     return f"Something went wrong trying to claim your ticket..."
 
 
-import os
-import discord
-from discord.ext import commands
-import csv
-#from io import StringIO, BytesIO
-#import codecs
-import io
-#import time
-
-bot = commands.Bot(command_prefix="!")
-DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
-TIDY = os.getenv("TIDY") == "True"
-if TIDY:
-  tidySuffix = " (This message will self-destruct in 10 seconds)"
 
 @bot.event
 async def on_ready():
