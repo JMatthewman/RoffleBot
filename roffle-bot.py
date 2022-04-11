@@ -15,6 +15,8 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = os.getenv("TIDY") == "True"
 if TIDY:
   tidySuffix = " (This message will self-destruct in 10 seconds)"
+else:
+  tidySuffix = ""
 
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
