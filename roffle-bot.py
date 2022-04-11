@@ -25,9 +25,9 @@ cur = con.cursor()
 
 def createMultiList():
   global multi  
-  cur.execute("""SELECT code FROM claims WHERE claims.multi_use = 1""")
+  cur.execute("""SELECT code FROM claims WHERE tickets.multi_use = 1""")
   multi = cur.fetchall()
-              
+  
 def validate(code):
   try:
     multi
