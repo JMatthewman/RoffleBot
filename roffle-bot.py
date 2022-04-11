@@ -111,7 +111,8 @@ async def addMulti(ctx, code, *args):
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
-  disqualifications = set(ctx.author.roles).intersection(banned_roles)
+  user_roles = set([role.name for role in ctx.author.roles])
+  disqualifications = user_roles.intersection(banned_roles)
   if len(disqualifications) > 0:
     reply = await ctx.reply("Sorry, {random.choice(disqualifications)}s are not allowed to enter the raffle.{tidySuffix}")
     if TIDY:
