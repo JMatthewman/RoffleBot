@@ -23,7 +23,7 @@ con.row_factory = sqlite3.Row
 cur = con.cursor()
 
 def claimTicket(code, user):
-  cur.execute('SELECT *, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS claims, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id AND claims.user_id = ?) AS my_claims FROM tickets WHERE code = ?', [code, user.id])
+  cur.execute('SELECT *, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS claims, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id AND claims.user_id = :user_id) AS my_claims FROM tickets WHERE code = :code', {"user_id": user.id, "code": code})
   tickets = cur.fetchall()
   if len(tickets) == 0:
     return f"We couldn't find any tickets matching `{code}`!"
@@ -34,10 +34,10 @@ def claimTicket(code, user):
   elif tickets[0]['multi_use'] == 0 and tickets[0]['claims'] > 0:
     return f"That ticket has already been claimed!"
   elif tickets[0]['multi_use'] == 1 or tickets[0]['claims'] == 0:
-    cur.execute('INSERT INTO claims (ticket_id, user_id, user_name, claimed) VALUES (?, ?, ?, CURRENT_TIMESTAMP)', [tickets[0]['ticket_id'], user.id, str(user)])
+    cur.execute('INSERT INTO claims (ticket_id, user_id, user_name, claimed) VALUES (:ticket_id, :user_id, :user_name, CURRENT_TIMESTAMP)', {"ticket_id": tickets[0]['ticket_id'], "user_id": user.id, "user_name": str(user)})
     con.commit()
       
-    cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = ?', [user.id])
+    cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = :user_id', {"user_id": user.id})
     userTickets = cur.fetchone()
     return f"You've succesfully claimed ticket `{tickets[0]['code']}` from {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
   else:
@@ -59,7 +59,7 @@ async def create(ctx, count, source):
   codes = []
   for i in range(count):
     newCode = ''.join(random.sample(chars, 6))
-    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (?, ?, 0, CURRENT_TIMESTAMP)', [newCode, source])
+    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": source})
     codes.append(newCode)
   con.commit()
   if count <= 100:
@@ -95,7 +95,7 @@ async def create_error(ctx, error):
 @commands.has_role("Roffle Admin")
 async def addMulti(ctx, code, source):
   print(f"Received request to add multi_use code '{code}' from {ctx.author}")
-  cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (?, ?, 1, CURRENT_TIMESTAMP)', [code, source])
+  cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code, "source": source})
   con.commit()
   reply = await ctx.reply(f"Multi-use code added!{tidySuffix}")
   if TIDY:
