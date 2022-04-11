@@ -39,6 +39,8 @@ import io
 bot = commands.Bot(command_prefix="!")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = os.getenv("TIDY") == "True"
+if TIDY:
+  tidySuffix = " (This message will self-destruct in 10 seconds)"
 
 @bot.event
 async def on_ready():
@@ -69,9 +71,9 @@ async def create(ctx, count, source):
       sb.flush()
       buffer.seek(0)
       discoFile = discord.File(sb, filename=f'Raffle Codes - {source}.csv')
-      await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are attached.", file=discoFile)
+      await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are attached.{tidySuffix}", file=discoFile)
 
-  reply = await ctx.reply(f"I've DMed you your new raffle ticket codes.")
+  reply = await ctx.reply(f"I've DMed you your new raffle ticket codes.{tidySuffix}")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
@@ -79,7 +81,7 @@ async def create(ctx, count, source):
 @create.error
 async def create_error(ctx, error):
   if isinstance(error, commands.MissingRole):
-    reply = await ctx.reply(":warning: You must have the `Roffle Admin` role to do that!")
+    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
@@ -92,7 +94,7 @@ async def addMulti(ctx, code, source):
   print(f"Received request to add multi_use code '{code}' from {ctx.author}")
   cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (?, ?, 1, CURRENT_TIMESTAMP)', [code, source])
   con.commit()
-  reply = await ctx.reply("Multi-use code added!")
+  reply = await ctx.reply(f"Multi-use code added!{tidySuffix}")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
@@ -102,7 +104,7 @@ async def addMulti(ctx, code, source):
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   response = claimTicket(code, ctx.author)
-  reply = await ctx.reply(response + ' Self destructing in 10 seconds.')
+  reply = await ctx.reply(response + {tidySuffix})
   print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   if TIDY:
     await ctx.message.delete(delay=10)
