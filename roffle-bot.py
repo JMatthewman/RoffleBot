@@ -110,6 +110,7 @@ async def ping(ctx):
 @commands.is_owner()
 async def quit(ctx):
   await ctx.reply("Exiting script, Goodbye!")
+  await bot.close()
   exit()
 
 if __name__ == "__main__":
