@@ -93,10 +93,10 @@ async def create_error(ctx, error):
 
 @bot.command()
 async def claim(ctx, code):
-  print(f"Received claim request from {ctx.author} ({ctx.author.id})")
+  print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   response = claimTicket(code, ctx.author.id)
   reply = await ctx.reply(response + ' Self destructing in 10 seconds.')
-  print(f"Processed claim request from {ctx.author} ({ctx.author.id})")
+  print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
