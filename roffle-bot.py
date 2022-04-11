@@ -26,7 +26,7 @@ cur = con.cursor()
 def createMultiList():
   global multi  
   cur.execute("""SELECT code FROM tickets WHERE tickets.multi_use = 1""")
-  multi = cur.fetchall()
+  multi = [row['code'] for row in cur.fetchall()]
   
 def validate(code):
   """ Check if a code is in the MultiList - Create multilist if it doesn't exist
