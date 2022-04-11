@@ -97,7 +97,7 @@ async def addMulti(ctx, code, source):
   reply = await ctx.reply("Multi-use code added!")
   if TIDY:
     await ctx.message.delete(delay=10)
-      await reply.delete(delay=10)
+    await reply.delete(delay=10)
 
 
 @bot.command()
