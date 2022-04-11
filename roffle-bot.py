@@ -52,9 +52,11 @@ async def on_ready():
 
 @bot.command()
 @commands.has_role("Roffle Admin")
-async def create(ctx, count, source):
+async def create(ctx, count, *args):
   print(f"Received request to generate new tickets from {ctx.author}")
   count = int(count)
+  source = ' '.join(args)
+  
   chars = string.ascii_letters + string.digits
   codes = []
   for i in range(count):
@@ -93,8 +95,9 @@ async def create_error(ctx, error):
 
 @bot.command()
 @commands.has_role("Roffle Admin")
-async def addMulti(ctx, code, source):
+async def addMulti(ctx, code, *args):
   print(f"Received request to add multi_use code '{code}' from {ctx.author}")
+  source = ' '.join(args)
   cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code, "source": source})
   con.commit()
   reply = await ctx.reply(f"Multi-use code added!{tidySuffix}")
