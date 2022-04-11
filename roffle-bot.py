@@ -130,6 +130,7 @@ async def claim(ctx, code):
 @claim.error
 async def claim_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
+    print(f"Rate limiting claim request for '{code}' from {ctx.author} ({ctx.author.id})")
     reply = await ctx.reply("You must wait 30 seconds between requests")
     if TIDY:
       await ctx.message.delete(delay=10)
