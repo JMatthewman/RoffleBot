@@ -133,6 +133,7 @@ async def addMulti(ctx, code, *args):
   cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code, "source": source})
   con.commit()
   reply = await ctx.reply(f"Multi-use code added!{tidySuffix}")
+  createMultiList()
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
