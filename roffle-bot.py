@@ -57,8 +57,6 @@ async def create(ctx, count, source):
     cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (?, ?, 0, CURRENT_TIMESTAMP)', [newCode, source])
     codes.append(newCode)
   con.commit()
-  print(type(codes))
-  print(type(codes[0]))
   if count <= 100:
     codesList = '\n'.join(codes)
     await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are: ```\n{codesList}```")
