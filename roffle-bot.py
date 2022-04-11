@@ -29,6 +29,9 @@ def createMultiList():
   multi = cur.fetchall()
   
 def validate(code):
+  """ Check if a code is in the MultiList - Create multilist if it doesn't exist
+      Check if the checksum works
+  """ 
   try:
     multi
   except:
@@ -37,11 +40,13 @@ def validate(code):
   if code in multi: 
     return True 
 
-  first = int(code[0])
-  second = int(code[1])
-  final = int(code[-2:])
-  return (first * second) + final == 68
-
+  try:
+    first = int(code[0])
+    second = int(code[1])
+    final = int(code[-2:])
+    return (first * second) + final == 68
+  except:
+    return False
     
 
 def claimTicket(code, user):
