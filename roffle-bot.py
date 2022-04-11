@@ -10,19 +10,23 @@ con.row_factory = sqlite3.Row
 cur = con.cursor()
 
 def claimTicket(code, user):
-  cur.execute('SELECT *, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS claims FROM tickets WHERE code = ?', [code])
+  cur.execute('SELECT *, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS claims, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id AND claims.user_id = ?) AS my_claims FROM tickets WHERE code = ?', [code, user.id])
   tickets = cur.fetchall()
   if len(tickets) == 0:
     return f"We couldn't find any tickets matching `{code}`!"
-  elif len(tickets) == 1 and (tickets[0]['multi_use'] == 1 or tickets[0]['claims'] == 0):
+  elif len(tickets) > 1:
+    return f"Something went wrong trying to claim your ticket..."
+  elif tickets[0]['my_claims'] > 0:
+    return f"You've already claimed that ticket!"
+  elif tickets[0]['multi_use'] == 0 and tickets[0]['claims'] > 0:
+    return f"That ticket has already been claimed!"
+  elif tickets[0]['multi_use'] == 1 or tickets[0]['claims'] == 0:
     cur.execute('INSERT INTO claims (ticket_id, user_id, user_name, claimed) VALUES (?, ?, ?, CURRENT_TIMESTAMP)', [tickets[0]['ticket_id'], user.id, str(user)])
     con.commit()
       
     cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = ?', [user.id])
     userTickets = cur.fetchone()
     return f"You've succesfully claimed ticket `{tickets[0]['code']}` from {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
-  elif len(tickets) == 1 and tickets[0]['multi_use'] == 0 and tickets[0]['claims'] > 0:
-    return f"That ticket has already been claimed!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
