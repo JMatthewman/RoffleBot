@@ -6,6 +6,9 @@ import discord
 from discord.ext import commands
 import csv
 import io
+import logging
+
+logging.basicConfig(filename=roffleBot.log, level=logging.DEBUG, format='%(asctime)s : %(levelname)s :: %(message)s')
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -102,13 +105,13 @@ def claimTicket(code, user):
 
 @bot.event
 async def on_ready():
-  print(f"Logged in as {bot.user.name}({bot.user.id})")
+  logging.info(f"Logged in as {bot.user.name}({bot.user.id})")
 
 
 @bot.command()
 @commands.has_role("Roffle Admin")
 async def create(ctx, count, *args):
-  print(f"Received request to generate new tickets from {ctx.author}")
+  logging.info(f"Received request to generate new tickets from {ctx.author}")
   count = int(count)
   source = ' '.join(args)
   
@@ -136,7 +139,7 @@ async def create(ctx, count, *args):
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
-  print(f"Replied to {ctx.author} with generated tickets")
+  logging.info(f"Replied to {ctx.author} with generated tickets")
 @create.error
 async def create_error(ctx, error):
   if isinstance(error, commands.MissingRole):
@@ -152,7 +155,7 @@ async def create_error(ctx, error):
 @bot.command()
 @commands.has_role("Roffle Admin")
 async def addMulti(ctx, code, *args):
-  print(f"Received request to add multi_use code '{code}' from {ctx.author}")
+  logging.info(f"Received request to add multi_use code '{code}' from {ctx.author}")
   source = ' '.join(args)
   cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code, "source": source})
   con.commit()
@@ -176,7 +179,7 @@ async def addMulti_error(ctx, error):
 @bot.command()
 @commands.has_role("Roffle Admin")
 async def giftTicket(ctx, *args):
-  print(f"Received request to gift ticket from {ctx.author}")
+  logging.info(f"Received request to gift ticket from {ctx.author}")
 
   for user in ctx.message.mentions:
     newCode = create_code()
@@ -202,7 +205,7 @@ async def giftTicket_error(ctx, error):
 @bot.command()
 @commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
 async def claim(ctx, code):
-  print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
+  logging.info(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
   user_roles = set([role.name for role in ctx.author.roles])
   disqualifications = user_roles.intersection(banned_roles)
@@ -215,14 +218,14 @@ async def claim(ctx, code):
   else:
     response = claimTicket(code, ctx.author)
     reply = await ctx.reply(response + tidySuffix)
-    print(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
+    logging.info(f"Processed claim request for '{code}' from {ctx.author} ({ctx.author.id})")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
 @claim.error
 async def claim_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
-    print(f"Rate limiting claim request from {ctx.author} ({ctx.author.id})")
+    logging.warning(f"Rate limiting claim request from {ctx.author} ({ctx.author.id})")
     reply = await ctx.reply("You must wait 30 seconds between requests")
     if TIDY:
       await ctx.message.delete(delay=10)
