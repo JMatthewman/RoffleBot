@@ -142,7 +142,7 @@ async def create_error(ctx, error):
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
-  elif isinstance(error, commands.NoPrivateMessage)
+  elif isinstance(error, commands.NoPrivateMessage):
     await ctx.reply("You cannot use this command in private messages")
   else:
     raise error
