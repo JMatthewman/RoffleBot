@@ -259,7 +259,18 @@ async def claim_error(ctx, error):
 @bot.command()
 @commands.has_role("Roffle Admin")
 async def ping(ctx):
-  await ctx.reply("Pong!")
+  reply = await ctx.reply("Pong!")
+
+  def check_reaction(reaction, user):
+    return user == ctx.author and str(reaction.emoji) == '👍'
+
+  try:
+    reaction, user = await bot.wait_for('reaction_add', check=check_reaction, timeout=120)
+  except asyncio.TimeoutError:
+    await reply.reply("Timed out waiting for confirmation")
+  else:
+    await reply.reply("I honestly don't know what this does")
+
   
 @bot.command()
 async def help(ctx):
