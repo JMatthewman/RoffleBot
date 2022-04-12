@@ -8,7 +8,17 @@ import csv
 import io
 import logging
 
-logging.basicConfig(filename='roffleBot.log', level=logging.INFO, format='%(asctime)s : %(levelname)s :: %(message)s')
+logFormat = logging.Formatter('%(asctime)s : %(levelname)s :: %(message)s')
+rootLogger = logging.getLogger()
+rootLogger.setLevel('INFO')
+
+fileLog = logging.handlers.TimedRotatingFileHandler('logs/roffleBot.log', when='D')
+fileLog.setFormatter(logFormat)
+rootLogger.addHandler(fileLog)
+
+consoleLog = logging.StreamHandler()
+consoleLog.setFormatter(logFormat)
+rootLogger.addHandler(consoleLog)
 
 from dotenv import load_dotenv
 load_dotenv()
