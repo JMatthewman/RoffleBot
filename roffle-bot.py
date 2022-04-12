@@ -70,26 +70,33 @@ def validate(code):
     return True 
 
   try:
-    first = int(code[0])
-    second = int(code[1])
-    third = int(code[2])
-    final = int(code[-2:])
-    return (first * second) + third + final == 68
+    code_number = code[:3]+code[-3:]
+    nSum = 0
+    isSecond = False
+
+    for i in range(5, -1, -1):
+      d = ord(code_number[i]) - ord('0')
+      if (isSecond == True):
+        d = d * 2
+      nSum += d // 10
+      nSum += d % 10
+
+      isSecond = not isSecond
+    return nSum % 10 == 0
   except:
     return False
 
 def create_code():
   try: 
     cleanwords
+    luhn
   except: 
     createWordList()
   
-  first = random.randint(1,9)
-  second = random.randint(1,6)
-  third = random.randint(1,7)
-  final = 68 - ((first * second) + third)
-  word = random.choice(cleanwords)
-  return f'{first}{second}{third}_{word}_{final}'
+  first = random.choice(cleanwords)
+  second = random.choice(cleanwords)
+  luhn_no = random.choice(luhn)
+  return f'{luhn_no[0:3]}_{first}_{second}_{luhn_no[3:]}'
 
 def claimTicket(code, user):
   
