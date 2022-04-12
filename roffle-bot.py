@@ -161,6 +161,17 @@ async def addMulti(ctx, code, *args):
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
+@addMulti.error
+async def addMulti_error(ctx, error):
+  if isinstance(error, commands.MissingRole):
+    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
+    if TIDY:
+      await ctx.message.delete(delay=10)
+      await reply.delete(delay=10)
+  elif isinstance(error, commands.NoPrivateMessage):
+    await ctx.reply("You cannot use this command in private messages")
+  else:
+    raise error
 
 
 @bot.command()
