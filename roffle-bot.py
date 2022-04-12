@@ -108,7 +108,7 @@ def claimTicket(code, user):
       
     cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = :user_id', {"user_id": user.id})
     userTickets = cur.fetchone()
-    return f"You've succesfully claimed ticket `{tickets[0]['code']}` from {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
+    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
