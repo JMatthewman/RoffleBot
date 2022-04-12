@@ -13,6 +13,7 @@ load_dotenv()
 bot = commands.Bot(command_prefix="!")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = os.getenv("TIDY") == "True"
+COOLDOWN_TIME = os.getenv("COOLDOWN_TIME")
 if TIDY:
   tidySuffix = " (This message will self-destruct in 10 seconds)"
 else:
@@ -159,7 +160,7 @@ async def addMulti(ctx, code, *args):
 
 
 @bot.command()
-@commands.cooldown(1, 30, commands.BucketType.user)
+@commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
 async def claim(ctx, code):
   print(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
