@@ -8,7 +8,7 @@ import csv
 import io
 import logging
 
-logging.basicConfig(filename='roffleBot.log', level=logging.DEBUG, format='%(asctime)s : %(levelname)s :: %(message)s')
+logging.basicConfig(filename='roffleBot.log', level=logging.INFO, format='%(asctime)s : %(levelname)s :: %(message)s')
 
 from dotenv import load_dotenv
 load_dotenv()
