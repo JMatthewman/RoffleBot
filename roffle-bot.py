@@ -66,7 +66,7 @@ def create_code():
   first = random.randint(1,5)
   second = random.randint(1,6)
   final = 68 - (first * second)
-  word = random.choice(words)
+  word = random.choice(cleanwords)
   return f'{first}{second}_{word}_{final}'
 
 def claimTicket(code, user):
