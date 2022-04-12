@@ -24,7 +24,7 @@ rootLogger.addHandler(consoleLog)
 from dotenv import load_dotenv
 load_dotenv()
 
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="!", help_command=None)
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = os.getenv("TIDY") == "True"
 COOLDOWN_TIME = os.getenv("COOLDOWN_TIME")
