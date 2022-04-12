@@ -251,9 +251,8 @@ async def ping(ctx):
   
 @bot.command()
 async def help(ctx):
-  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy!")
-  await ctx.reply("Just say !claim and then add your code!")
-  await ctx.reply("That's it!")
+  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !claim and then your code. \n That's it! Happy Raffle ")
+
 
 @bot.command()
 @commands.has_role("Roffle Admin")
