@@ -47,10 +47,15 @@ def createMultiList():
 def createWordList(): 
   """ Function that creates word list from the text file """
   global cleanwords
+  global luhn
   cleanwords = []
+  luhn = []
   with open('supercleanwords.csv','r') as file:
     for line in file:
         cleanwords.append(line.replace('\n', ''))
+  with open('LuhnNumbers.csv','r') as file:
+    for line in file:
+        luhn.append(line.replace('\n', ''))
   
 def validate(code):
   """ Check if a code is in the MultiList - Create multilist if it doesn't exist
@@ -65,26 +70,33 @@ def validate(code):
     return True 
 
   try:
-    first = int(code[0])
-    second = int(code[1])
-    third = int(code[2])
-    final = int(code[-2:])
-    return (first * second) + third + final == 68
+    code_number = code[:3]+code[-3:]
+    nSum = 0
+    isSecond = False
+
+    for i in range(5, -1, -1):
+      d = ord(code_number[i]) - ord('0')
+      if (isSecond == True):
+        d = d * 2
+      nSum += d // 10
+      nSum += d % 10
+
+      isSecond = not isSecond
+    return nSum % 10 == 0
   except:
     return False
 
 def create_code():
   try: 
     cleanwords
+    luhn
   except: 
     createWordList()
   
-  first = random.randint(1,9)
-  second = random.randint(1,6)
-  third = random.randint(1,7)
-  final = 68 - ((first * second) + third)
-  word = random.choice(cleanwords)
-  return f'{first}{second}{third}_{word}_{final}'
+  first = random.choice(cleanwords)
+  second = random.choice(cleanwords)
+  luhn_no = random.choice(luhn)
+  return f'{luhn_no[0:3]}_{first}_{second}_{luhn_no[3:]}'
 
 def claimTicket(code, user):
   
@@ -108,7 +120,7 @@ def claimTicket(code, user):
       
     cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = :user_id', {"user_id": user.id})
     userTickets = cur.fetchone()
-    return f"You've succesfully claimed ticket `{tickets[0]['code']}` from {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
+    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
@@ -248,6 +260,11 @@ async def claim_error(ctx, error):
 @commands.has_role("Roffle Admin")
 async def ping(ctx):
   await ctx.reply("Pong!")
+  
+@bot.command()
+async def help(ctx):
+  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !claim and then your code. Example: \n !claim rafflesareawesome \n That's it! \n Happy Raffle ")
+
 
 @bot.command()
 @commands.has_role("Roffle Admin")
