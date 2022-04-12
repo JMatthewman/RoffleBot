@@ -248,6 +248,12 @@ async def claim_error(ctx, error):
 @commands.has_role("Roffle Admin")
 async def ping(ctx):
   await ctx.reply("Pong!")
+  
+@bot.command()
+async def help(ctx):
+  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy!")
+  await ctx.reply("Just say !claim and then add your code!")
+  await ctx.reply("That's it!")
 
 @bot.command()
 @commands.has_role("Roffle Admin")
