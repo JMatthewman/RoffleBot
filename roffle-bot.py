@@ -178,7 +178,7 @@ async def addMulti_error(ctx, error):
 async def giftTicket(ctx, *args):
   print(f"Received request to gift ticket from {ctx.author}")
 
-  for user in ctx.message.mentions
+  for user in ctx.message.mentions:
     newCode = create_code()
     cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": source})
     con.commit()
