@@ -173,6 +173,31 @@ async def addMulti_error(ctx, error):
   else:
     raise error
 
+@bot.command()
+@commands.has_role("Roffle Admin")
+async def giftTicket(ctx, *args):
+  print(f"Received request to gift ticket from {ctx.author}")
+
+  for user in ctx.message.mentions
+    newCode = create_code()
+    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": source})
+    con.commit()
+    result = claimTicket(newCode, user)
+    reply = await ctx.reply(f"{result}{tidySuffix}")
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
+@giftTicket.error
+async def giftTicket_error(ctx, error):
+  if isinstance(error, commands.MissingRole):
+    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
+    if TIDY:
+      await ctx.message.delete(delay=10)
+      await reply.delete(delay=10)
+  elif isinstance(error, commands.NoPrivateMessage):
+    await ctx.reply("You cannot use this command in private messages")
+  else:
+    raise error
 
 @bot.command()
 @commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
