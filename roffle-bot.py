@@ -24,9 +24,18 @@ con.row_factory = sqlite3.Row
 cur = con.cursor()
 
 def createMultiList():
+  """ Function to fetch the allowed list of multi codes from the database """
   global multi  
   cur.execute("""SELECT code FROM tickets WHERE tickets.multi_use = 1""")
   multi = [row['code'] for row in cur.fetchall()]
+  
+def createWordList(): 
+  """ Function that creates word list from the text file """
+  global cleanwords
+  cleanwords = []
+  with open('supercleanwords.csv','r') as file:
+    for line in file:
+        cleanwords.append(line.replace('\n', ''))
   
 def validate(code):
   """ Check if a code is in the MultiList - Create multilist if it doesn't exist
@@ -47,7 +56,18 @@ def validate(code):
     return (first * second) + final == 68
   except:
     return False
-    
+
+def create_code():
+  try: 
+    cleanwords
+  except: 
+    createWordList()
+  
+  first = random.randint(1,5)
+  second = random.randint(1,6)
+  final = 68 - (first * second)
+  word = random.choice(words)
+  return f'{first}{second}_{word}_{final}'
 
 def claimTicket(code, user):
   
@@ -89,10 +109,9 @@ async def create(ctx, count, *args):
   count = int(count)
   source = ' '.join(args)
   
-  chars = string.ascii_letters + string.digits
   codes = []
   for i in range(count):
-    newCode = ''.join(random.sample(chars, 6))
+    newCode = create_code()
     cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": source})
     codes.append(newCode)
   con.commit()
