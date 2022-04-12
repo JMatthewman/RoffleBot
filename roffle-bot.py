@@ -53,8 +53,9 @@ def validate(code):
   try:
     first = int(code[0])
     second = int(code[1])
+    third = int(code[2])
     final = int(code[-2:])
-    return (first * second) + final == 68
+    return (first * second) + third + final == 68
   except:
     return False
 
@@ -64,11 +65,12 @@ def create_code():
   except: 
     createWordList()
   
-  first = random.randint(1,5)
+  first = random.randint(1,9)
   second = random.randint(1,6)
-  final = 68 - (first * second)
+  third = random.randint(1,7)
+  final = 68 - ((first * second) + third)
   word = random.choice(cleanwords)
-  return f'{first}{second}_{word}_{final}'
+  return f'{first}{second}{third}_{word}_{final}'
 
 def claimTicket(code, user):
   
