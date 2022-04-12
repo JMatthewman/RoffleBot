@@ -7,12 +7,13 @@ from discord.ext import commands
 import csv
 import io
 import logging
+from logging.handlers import TimedRotatingFileHandler
 
 logFormat = logging.Formatter('%(asctime)s : %(levelname)s :: %(message)s')
 rootLogger = logging.getLogger()
 rootLogger.setLevel('INFO')
 
-fileLog = logging.handlers.TimedRotatingFileHandler('logs/roffleBot.log', when='D')
+fileLog = TimedRotatingFileHandler('logs/roffleBot.log', when='D')
 fileLog.setFormatter(logFormat)
 rootLogger.addHandler(fileLog)
 
