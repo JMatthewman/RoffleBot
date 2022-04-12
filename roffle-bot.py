@@ -47,10 +47,15 @@ def createMultiList():
 def createWordList(): 
   """ Function that creates word list from the text file """
   global cleanwords
+  global luhn
   cleanwords = []
+  luhn = []
   with open('supercleanwords.csv','r') as file:
     for line in file:
         cleanwords.append(line.replace('\n', ''))
+  with open('LuhnNumbers.csv', 'r') as file:
+    for line in file:
+      luhn.append(line.replace('\n', ''))
   
 def validate(code):
   """ Check if a code is in the MultiList - Create multilist if it doesn't exist
