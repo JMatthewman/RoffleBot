@@ -273,7 +273,7 @@ async def setPrizes(ctx):
   else:
     if str(reaction.emoji) == '👍':
       await confPrompt.reply("Thanks for confirming, I will now do a thing")
-    if str(reaction.emoji) == '👎':
+    elif str(reaction.emoji) == '👎':
       await confPrompt.reply("Thanks for confirming, I will now cancel the action")
 
 
