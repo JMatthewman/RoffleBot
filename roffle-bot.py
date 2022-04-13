@@ -269,12 +269,12 @@ async def setPrizes(ctx):
   try:
     reaction, user = await bot.wait_for('reaction_add', check=checkReactionThumbs, timeout=120)
   except TimeoutError:
-    await reply.reply("Timed out waiting for confirmation, I will now cancel the action")
+    await confPrompt.reply("Timed out waiting for confirmation, I will now cancel the action")
   else:
     if str(reaction.emoji) == '👍':
-      await reply.reply("Thanks for confirming, I will now do a thing")
+      await confPrompt.reply("Thanks for confirming, I will now do a thing")
     if str(reaction.emoji) == '👎':
-      await reply.reply("Thanks for confirming, I will now cancel the action")
+      await confPrompt.reply("Thanks for confirming, I will now cancel the action")
 
 
 @bot.command()
