@@ -256,6 +256,27 @@ async def claim_error(ctx, error):
   else:
     raise error
 
+
+@bot.command()
+@commands.has_role("Roffle Admin")
+async def setPrizes(ctx):
+
+  confPrompt = await ctx.reply("This will delete all existing prizes, and replace them with this spreadsheet! Please react 👍 to confirm this is what you want to do")
+
+  def checkReactionThumbs(reaction, user):
+    return user == ctx.author and ( str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎' )
+
+  try:
+    reaction, user = await bot.wait_for('reaction_add', check=checkReactionThumbs, timeout=120)
+  except TimeoutError:
+    await reply.reply("Timed out waiting for confirmation, I will now cancel the action")
+  else:
+    if str(reaction.emoji) == '👍'
+      await reply.reply("Thanks for confirming, I will now do a thing")
+    if str(reaction.emoji) == '👎'
+      await reply.reply("Thanks for confirming, I will now cancel the action")
+
+
 @bot.command()
 @commands.has_role("Roffle Admin")
 async def ping(ctx):
