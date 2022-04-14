@@ -133,7 +133,7 @@ async def on_ready():
 
 @bot.command()
 async def deleteusertickets():
-  reply = ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
+  reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
