@@ -133,6 +133,7 @@ async def on_ready():
 
 @bot.command()
 async def deleteusertickets(ctx):
+  logging.info(f"deleteusertickets troll command called by {bot.user.name}({bot.user.id})")
   reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
     await ctx.message.delete(delay=10)
