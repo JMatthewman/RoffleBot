@@ -227,7 +227,7 @@ async def giftTicket_error(ctx, error):
 
 @bot.command()
 @commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
-async def claim(ctx, code):
+async def raffle(ctx, code):
   logging.info(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
   user_roles = set([role.name for role in ctx.author.roles])
@@ -245,8 +245,8 @@ async def claim(ctx, code):
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
-@claim.error
-async def claim_error(ctx, error):
+@raffle.error
+async def raffle_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     logging.warning(f"Rate limiting claim request from {ctx.author} ({ctx.author.id})")
     reply = await ctx.reply("You must wait 30 seconds between requests")
@@ -263,7 +263,7 @@ async def ping(ctx):
   
 @bot.command()
 async def help(ctx):
-  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !claim and then your code. Example: \n !claim rafflesareawesome \n That's it! \n Happy Raffle ")
+  await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !raffle and then your code. Example: \n !raffle rafflesareawesome \n That's it! \n Happy Raffle ")
 
 
 @bot.command()
