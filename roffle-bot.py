@@ -131,7 +131,7 @@ def claimTicket(code, user):
 async def on_ready():
   logging.info(f"Logged in as {bot.user.name}({bot.user.id})")
 
-@bot.command
+@bot.command()
 async def deleteusertickets():
   reply = ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
