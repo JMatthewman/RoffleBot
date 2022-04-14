@@ -33,7 +33,7 @@ if TIDY:
 else:
   tidySuffix = ""
 banned_roles = set(os.getenv("BANNED_ROLES").split(','))
-admin_roles = set(os.getenv("ADMIN_ROLES").split(','))
+admin_roles = os.getenv("ADMIN_ROLES").split(',')
 
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
