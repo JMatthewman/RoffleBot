@@ -132,7 +132,7 @@ async def on_ready():
   logging.info(f"Logged in as {bot.user.name}({bot.user.id})")
 
 @bot.command()
-async def deleteusertickets():
+async def deleteusertickets(ctx):
   reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
     await ctx.message.delete(delay=10)
