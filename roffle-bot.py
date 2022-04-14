@@ -260,6 +260,11 @@ async def raffle_error(ctx, error):
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
+  elif isinstance(error, commands.MissingRequiredArgument):
+      reply = await ctx.reply(f"You need to enter a code! You may be given these through the event, but you can get started with `Insomnia68` for free.{tidySuffix}")
+      if TIDY:
+        await ctx.message.delete(delay=10)
+        await reply.delete(delay=10)
   else:
     raise error
 
