@@ -132,7 +132,7 @@ async def on_ready():
 
 
 @bot.command()
-@commands.has_role("Roffle Admin")
+@commands.has_role("Discord Admins")
 async def create(ctx, count, *args):
   logging.info(f"Received request to generate new tickets from {ctx.author}")
   count = int(count)
@@ -166,7 +166,7 @@ async def create(ctx, count, *args):
 @create.error
 async def create_error(ctx, error):
   if isinstance(error, commands.MissingRole):
-    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
+    reply = await ctx.reply(f":warning: You must have the `Discord Admins` role to do that!{tidySuffix}")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
@@ -176,7 +176,7 @@ async def create_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_role("Roffle Admin")
+@commands.has_role("Discord Admins")
 async def addMulti(ctx, code, *args):
   logging.info(f"Received request to add multi_use code '{code}' from {ctx.author}")
   source = ' '.join(args)
@@ -190,7 +190,7 @@ async def addMulti(ctx, code, *args):
 @addMulti.error
 async def addMulti_error(ctx, error):
   if isinstance(error, commands.MissingRole):
-    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
+    reply = await ctx.reply(f":warning: You must have the `Discord Admins` role to do that!{tidySuffix}")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
@@ -200,7 +200,7 @@ async def addMulti_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_role("Roffle Admin")
+@commands.has_role("Discord Admins")
 async def giftTicket(ctx, *args):
   logging.info(f"Received request to gift ticket from {ctx.author}")
 
@@ -216,7 +216,7 @@ async def giftTicket(ctx, *args):
 @giftTicket.error
 async def giftTicket_error(ctx, error):
   if isinstance(error, commands.MissingRole):
-    reply = await ctx.reply(f":warning: You must have the `Roffle Admin` role to do that!{tidySuffix}")
+    reply = await ctx.reply(f":warning: You must have the `Discord Admins` role to do that!{tidySuffix}")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
@@ -257,7 +257,7 @@ async def claim_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_role("Roffle Admin")
+@commands.has_role("Discord Admins")
 async def ping(ctx):
   await ctx.reply("Pong!")
   
@@ -267,7 +267,7 @@ async def help(ctx):
 
 
 @bot.command()
-@commands.has_role("Roffle Admin")
+@commands.has_role("Discord Admins")
 async def quit(ctx):
   await ctx.reply("Exiting script, Goodbye!")
   await bot.close()
