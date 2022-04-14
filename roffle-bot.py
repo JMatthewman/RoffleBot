@@ -133,7 +133,7 @@ async def on_ready():
 
 
 @bot.command()
-@commands.has_any_role(admin_roles)
+@commands.has_any_role(*admin_roles)
 async def create(ctx, count, *args):
   logging.info(f"Received request to generate new tickets from {ctx.author}")
   count = int(count)
@@ -177,7 +177,7 @@ async def create_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_any_role(admin_roles)
+@commands.has_any_role(*admin_roles)
 async def addMulti(ctx, code, *args):
   logging.info(f"Received request to add multi_use code '{code}' from {ctx.author}")
   source = ' '.join(args)
@@ -201,14 +201,14 @@ async def addMulti_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_any_role(admin_roles) 
+@commands.has_any_role(*admin_roles) 
 async def listmulti(ctx):
   createMultiList()
   await ctx.reply(multi)
     
     
 @bot.command()
-@commands.has_any_role(admin_roles)
+@commands.has_any_role(*admin_roles)
 async def giftTicket(ctx, *args):
   logging.info(f"Received request to gift ticket from {ctx.author}")
 
@@ -270,7 +270,7 @@ async def raffle_error(ctx, error):
     raise error
 
 @bot.command()
-@commands.has_any_role(admin_roles)
+@commands.has_any_role(*admin_roles)
 async def ping(ctx):
   await ctx.reply("Pong!")
   
@@ -280,7 +280,7 @@ async def help(ctx):
 
 
 @bot.command()
-@commands.has_any_role(admin_roles)
+@commands.has_any_role(*admin_roles)
 async def quit(ctx):
   await ctx.reply("Exiting script, Goodbye!")
   await bot.close()
