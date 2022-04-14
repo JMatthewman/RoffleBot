@@ -200,6 +200,13 @@ async def addMulti_error(ctx, error):
     raise error
 
 @bot.command()
+@commands.has_role("Discord Admin") 
+async def listmulti(ctx):
+  createMultiList()
+  await ctx.reply(multi)
+    
+    
+@bot.command()
 @commands.has_role("Discord Admin")
 async def giftTicket(ctx, *args):
   logging.info(f"Received request to gift ticket from {ctx.author}")
