@@ -160,7 +160,7 @@ async def deleteusertickets(ctx):
 
 @bot.command()
 async def checktickets(ctx):
-  userTickets = countUserTickets(ctx.user)
+  userTickets = countUserTickets(ctx.author)
   reply = await ctx.reply(f"You have {userTickets} ticket(s) in the raffle! Good luck!{tidySuffix}")
   if TIDY:
     await ctx.message.delete(delay=10)
