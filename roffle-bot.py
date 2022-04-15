@@ -100,7 +100,8 @@ def create_code():
   return f'{luhn_no[0:3]}_{first}_{second}_{luhn_no[3:]}'
 
 def claimTicket(code, user):
-  
+  code = code.lower()
+
   ## Check if the code is in the MultiList or is valid.
   if validate(code) == False:
     return f"Sorry that code isn't a valid ticket"
@@ -131,9 +132,25 @@ def claimTicket(code, user):
 async def on_ready():
   logging.info(f"Logged in as {bot.user.name}({bot.user.id})")
 
+@bot.event
+async def on_command(ctx):
+  logging.info(f"'{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
+
+
+@bot.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CommandNotFound):
+    logging.warning(f"Invalid command: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
+  elif isinstance(error, commands.MissingRequiredArgument):
+    logging.warning(f"Missing Arguments: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
+  elif isinstance(error, commands.MissingPermissions):
+    logging.warning(f"Missing Permissions: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
+  else:
+    logging.error(f"{error}: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
+
+
 @bot.command()
 async def deleteusertickets(ctx):
-  logging.info(f"deleteusertickets troll command called by {bot.user.name}({bot.user.id})")
   reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
     await ctx.message.delete(delay=10)
@@ -188,7 +205,7 @@ async def create_error(ctx, error):
 async def addMulti(ctx, code, *args):
   logging.info(f"Received request to add multi_use code '{code}' from {ctx.author}")
   source = ' '.join(args)
-  cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code, "source": source})
+  cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 1, CURRENT_TIMESTAMP)', {"code": code.lower(), "source": source})
   con.commit()
   reply = await ctx.reply(f"Multi-use code added!{tidySuffix}")
   createMultiList()
@@ -221,7 +238,7 @@ async def giftTicket(ctx, *args):
 
   for user in ctx.message.mentions:
     newCode = create_code()
-    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": f"Gifted by {ctx.author}"})
+    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode.lower(), "source": f"Gifted by {ctx.author}"})
     con.commit()
     result = claimTicket(newCode, user)
     reply = await ctx.reply(f"{result}{tidySuffix}")
