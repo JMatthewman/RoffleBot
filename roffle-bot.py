@@ -120,13 +120,15 @@ def claimTicket(code, user):
     cur.execute('INSERT INTO claims (ticket_id, user_id, user_name, claimed) VALUES (:ticket_id, :user_id, :user_name, CURRENT_TIMESTAMP)', {"ticket_id": tickets[0]['ticket_id'], "user_id": user.id, "user_name": str(user)})
     con.commit()
       
-    cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = :user_id', {"user_id": user.id})
-    userTickets = cur.fetchone()
-    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets['count']} ticket(s) in the raffle! Good luck!"
+    userTickets = countUserTickets(user)
+    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets} ticket(s) in the raffle! Good luck!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
-
+def countUserTickets(user):
+  cur.execute('SELECT COUNT(*) AS count FROM claims WHERE user_id = :user_id', {"user_id": user.id})
+  userTickets = cur.fetchone()
+  return userTickets['count']
 
 @bot.event
 async def on_ready():
@@ -152,6 +154,14 @@ async def on_command_error(ctx, error):
 @bot.command()
 async def deleteusertickets(ctx):
   reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
+
+@bot.command()
+async def checktickets(ctx):
+  userTickets = countUserTickets(ctx.author)
+  reply = await ctx.reply(f"You have {userTickets} ticket(s) in the raffle! Good luck!{tidySuffix}")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
