@@ -27,6 +27,7 @@ load_dotenv()
 bot = commands.Bot(command_prefix="!", help_command=None)
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 TIDY = os.getenv("TIDY") == "True"
+COOLDOWN_LIMIT = os.getenv("COOLDOWN_LIMIT")
 COOLDOWN_TIME = os.getenv("COOLDOWN_TIME")
 if TIDY:
   tidySuffix = " (This message will self-destruct in 10 seconds)"
@@ -268,7 +269,7 @@ async def giftTicket_error(ctx, error):
     raise error
 
 @bot.command(name='raffle', aliases=['Raffle'])
-@commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
+@commands.cooldown(COOLDOWN_LIMIT, COOLDOWN_TIME, commands.BucketType.user)
 async def raffle(ctx, code):
   logging.info(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
 
@@ -291,7 +292,7 @@ async def raffle(ctx, code):
 async def raffle_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     logging.warning(f"Rate limiting claim request from {ctx.author} ({ctx.author.id})")
-    reply = await ctx.reply("You must wait 30 seconds between requests")
+    reply = await ctx.reply(f"You're being rate limited :angry:. Please wait {error.retry_after:.0f} seconds before trying again!{tidySuffix}'")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
