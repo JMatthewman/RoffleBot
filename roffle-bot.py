@@ -267,7 +267,7 @@ async def giftTicket_error(ctx, error):
   else:
     raise error
 
-@bot.command()
+@bot.command(name='raffle', aliases=['Raffle'])
 @commands.cooldown(1, COOLDOWN_TIME, commands.BucketType.user)
 async def raffle(ctx, code):
   logging.info(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
