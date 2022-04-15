@@ -133,19 +133,19 @@ async def on_ready():
 
 @bot.event
 async def on_command(ctx):
-  logging.info(f"'{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
+  logging.info(f"'{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
 
 
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
-    logging.warning(f"Invalid command: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
+    logging.warning(f"Invalid command: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
   elif isinstance(error, commands.MissingRequiredArgument):
-    logging.warning(f"Missing Arguments: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
+    logging.warning(f"Missing Arguments: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
   elif isinstance(error, commands.MissingPermissions):
-    logging.warning(f"Missing Permissions: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
+    logging.warning(f"Missing Permissions: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
   else:
-    logging.error(f"{error}: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
+    logging.error(f"{error}: '{ctx.message.content}' called by {ctx.author} ({ctx.author.id}) in '{ctx.guild}': '{ctx.channel}'")
 
 
 @bot.command()
