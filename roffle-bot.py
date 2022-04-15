@@ -133,19 +133,19 @@ async def on_ready():
 
 @bot.event
 async def on_command(ctx):
-  logging.info(f"{ctx.command} called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+  logging.info(f"'{ctx.message}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
 
 
 @bot.event
 async def on_command_error(ctx, error):
   if isinstance(error, commands.CommandNotFound):
-    logging.warning(f"Invalid command: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+    logging.warning(f"Invalid command: '{ctx.message}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
   elif isinstance(error, commands.MissingRequiredArgument):
-    logging.warning(f"Missing Arguments: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+    logging.warning(f"Missing Arguments: '{ctx.message}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
   elif isinstance(error, commands.MissingPermissions):
-    logging.warning(f"Missing Permissions: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+    logging.warning(f"Missing Permissions: '{ctx.message}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
   else:
-    logging.error(f"{error}: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+    logging.error(f"{error}: '{ctx.message}' called by {ctx.author} ({ctx.author.id}) in {ctx.guild}#{ctx.channel}")
 
 
 @bot.command()
