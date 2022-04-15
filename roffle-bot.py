@@ -144,7 +144,7 @@ async def on_command_error(ctx, error):
     logging.warning(f"Missing Arguments: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
   elif isinstance(error, commands.MissingPermissions):
     logging.warning(f"Missing Permissions: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
-  else
+  else:
     logging.error(f"{error}: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
 
 
