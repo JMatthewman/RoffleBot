@@ -131,9 +131,25 @@ def claimTicket(code, user):
 async def on_ready():
   logging.info(f"Logged in as {bot.user.name}({bot.user.id})")
 
+@bot.event
+async def on_command(ctx):
+  logging.info(f"{ctx.command} called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+
+
+@bot.event
+async def on_command_error(ctx, error):
+  if isinstance(error, commands.CommandNotFound):
+    logging.warning(f"Invalid command: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+  elif isinstance(error, commands.MissingRequiredArgument):
+    logging.warning(f"Missing Arguments: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+  elif isinstance(error, commands.MissingPermissions):
+    logging.warning(f"Missing Permissions: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+  else
+    logging.error(f"{error}: '{ctx.command}' called by {bot.user.name}({bot.user.id}) in {ctx.guild}#{ctx.channel} with parameters {ctx.args}")
+
+
 @bot.command()
 async def deleteusertickets(ctx):
-  logging.info(f"deleteusertickets troll command called by {bot.user.name}({bot.user.id})")
   reply = await ctx.reply(f'https://tenor.com/bmcQR.gif{tidySuffix}')
   if TIDY:
     await ctx.message.delete(delay=10)
