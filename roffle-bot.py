@@ -292,7 +292,7 @@ async def raffle(ctx, code):
 async def raffle_error(ctx, error):
   if isinstance(error, commands.CommandOnCooldown):
     logging.warning(f"Rate limiting claim request from {ctx.author} ({ctx.author.id})")
-    reply = await ctx.reply("You're being rate limited :angry:. Please wait {error.retry_after:.0f} seconds before trying again!{tidySuffix}'")
+    reply = await ctx.reply(f"You're being rate limited :angry:. Please wait {error.retry_after:.0f} seconds before trying again!{tidySuffix}'")
     if TIDY:
       await ctx.message.delete(delay=10)
       await reply.delete(delay=10)
