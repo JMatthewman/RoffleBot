@@ -180,19 +180,15 @@ async def create(ctx, count, *args):
     cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode, "source": source})
     codes.append(newCode)
   con.commit()
-  if count <= 100:
-    codesList = '\n'.join(codes)
-    await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are: ```\n{codesList}```")
-  else:
-    with io.BytesIO() as buffer:
-      sb = io.TextIOWrapper(buffer, 'utf-8', newline='')
-      csv.writer(sb).writerow(['Raffle Code','Code Source'])
-      for code in codes:
-        csv.writer(sb).writerow([code,source])
-      sb.flush()
-      buffer.seek(0)
-      discoFile = discord.File(sb, filename=f'Raffle Codes - {source}.csv')
-      await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are attached.{tidySuffix}", file=discoFile)
+  with io.BytesIO() as buffer:
+    sb = io.TextIOWrapper(buffer, 'utf-8', newline='')
+    csv.writer(sb).writerow(['Raffle Code','Code Source'])
+    for code in codes:
+      csv.writer(sb).writerow([code,source])
+    sb.flush()
+    buffer.seek(0)
+    discoFile = discord.File(sb, filename=f'Raffle Codes - {source}.csv')
+    await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are attached.{tidySuffix}", file=discoFile)
 
   reply = await ctx.reply(f"I've DMed you your new raffle ticket codes.{tidySuffix}")
   if TIDY:
