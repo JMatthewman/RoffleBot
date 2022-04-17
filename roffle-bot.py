@@ -183,9 +183,9 @@ async def stats(ctx):
   sourceTable = tabulate(topSources, ['Source', 'Claims'], tablefmt="grid")
 
   statsText = f"*Total Tickets Claimed:*\n"
-  statsText += f"{claims['Total Claims']}\n\n"
+  statsText += f"{claims[0]['Total Claims']}\n\n"
   statsText += f"*Unique Participants:*\n"
-  statsText += f"{claims['Unique Users']}\n\n"
+  statsText += f"{claims[0]['Unique Users']}\n\n"
   statsText += f"*Multi-Use Code Claims:\n"
   statsText += f"`{multiTable}`\n\n"
   statsText += f"*Top Sources Claims:\n"
