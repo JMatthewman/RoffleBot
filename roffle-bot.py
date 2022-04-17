@@ -345,7 +345,7 @@ async def ping(ctx):
 async def help(ctx):
   await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !raffle and then your code. Example: \n !raffle rafflesareawesome \n That's it! \n Happy Raffle ")
 
-  @bot.command()
+@bot.command()
 async def when(ctx):
   await ctx.reply("The raffle will be drawn at 12pm on Monday! \n The top prizes (such as Fifa 17) are drawn live, the rest on Discord. \n Winners will get a Discord messages straight from RoffleBot \n You must be at the event to claim. \n Happy Raffle ")
 
