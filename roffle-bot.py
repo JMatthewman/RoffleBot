@@ -277,11 +277,17 @@ async def listmulti(ctx):
 @commands.has_any_role(*admin_roles) 
 async def pet_rofflebot(ctx):
   choices = ['teehehehehehhe', 'ooooohhhhh mooommmyyy', 'me likely', 'sscrrattcchheessss']
-  await ctx.reply(random.choice(choices))
+  reply = await ctx.reply(random.choice(choices))
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
 @pet_rofflebot.error
 async def petrofflebot_error(ctx, error):
   choices = ['No touchy the RoffleBot.', 'Have you heard of consent?', 'botty going to bitey you', 'YOU ARE NOT MY MUMMY.']
-  await ctx.reply(random.choice(choices))
+  reply = await ctx.reply(random.choice(choices))
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
     
 @bot.command()
 @commands.has_any_role(*admin_roles)
