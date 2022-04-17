@@ -197,11 +197,12 @@ async def stats(ctx):
 async def announceWinners(ctx):
   winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
-  winnersDict = {}
+  winnersDict = []
   for winner in winners:
     my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
     winnersDict.append(my_dict)
-  winnerTable = tabulate(winnersDict, headers=['Winner', 'Prize'], tablefmt="github")
+  rows = [x.values() for x in my_dict]
+  winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
   await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n{winnerTable}")
 
 
@@ -212,7 +213,7 @@ async def notifyWinners(ctx):
 
   for win in winners:
     winner = await bot.fetch_user(win['user_id'])
-    await winner.send(f"Congratulations <@{win['user_id']}>, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.`")
+    await winner.send(f"Congratulations <@{win['user_id']}>!, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.")
 
 
 @bot.command()
