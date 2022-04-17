@@ -361,7 +361,7 @@ async def raffle_error(ctx, error):
     raise error
 
 
-@bot.command(name="ophra", aliases=['oprah.gif'])
+@bot.command(name="oprah", aliases=['oprah.gif'])
 @commands.has_any_role(*admin_roles)
 async def oprah(ctx, *args):
   reason = ' '.join(args)
@@ -374,7 +374,7 @@ async def oprah(ctx, *args):
     cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode.lower(), "source": f"Gifted by {ctx.author} for `{reason}`"})
     con.commit()
     result = claimTicket(newCode, user)
-    reply = await ctx.reply(f"{result}{tidySuffix}")
+    reply = await ctx.reply(f"Gifted <@{user.id}> a raffle ticket for `{reason}`.{tidySuffix}")
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
