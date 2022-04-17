@@ -180,7 +180,7 @@ async def stats(ctx):
   topSources = query('''SELECT source, COUNT(claim_id) FROM claims LEFT JOIN tickets ON claims.ticket_id = tickets.ticket_id GROUP BY source ORDER BY COUNT(claim_id) DESC LIMIT 10''')
   
   multiTable = tabulate(multiUsage, ['Code', 'Uses'], tablefmt="grid")
-  await ctx.reply(multiTable)
+  await ctx.reply(f"`{multiTable}`")
 
 @bot.command()
 @commands.has_any_role(*admin_roles)
