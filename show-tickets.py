@@ -3,11 +3,11 @@ rawCon = sqlite3.connect('roffleBot.db')
 
 rawCur = rawCon.cursor()
 
-rawCur.execute('UPDATE tickets set source = "PubQuizzing" WHERE source = "raffling"' )
+rawCur.execute('SELECT * FROM tickets')
 data = rawCur.fetchall()
-rawCon.commit()
 
 rawCur.close()
 rawCon.close()
 
-exit()
+for row in data:
+  print(row)

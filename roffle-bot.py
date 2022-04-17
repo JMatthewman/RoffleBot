@@ -167,29 +167,6 @@ async def checktickets(ctx):
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
 
-
-@bot.command()
-@commands.has_any_role(*admin_roles)
-async def dumpdb(ctx):
-  for table in ['tickets','claims']:
-    cur.execute('SELECT * FROM :table', {"table": table})
-    data = cur.fetchall()
-
-    with io.BytesIO() as buffer:
-      sb = io.TextIOWrapper(buffer, 'utf-8', newline='')
-      csv.writer(sb).writerow(['Raffle Code','Code Source'])
-      for row in data:
-        csv.writer(sb).writerow(data)
-      sb.flush()
-      buffer.seek(0)
-      discoFile = discord.File(sb, filename=f'{table}.csv')
-      await ctx.author.send(f"{table} table data attached.", file=discoFile)
-
-  reply = await ctx.reply(f"I've DMed you your data.{tidySuffix}")
-  if TIDY:
-    await ctx.message.delete(delay=10)
-    await reply.delete(delay=10)
-
 @bot.command()
 @commands.has_any_role(*admin_roles)
 async def create(ctx, count, *args):
