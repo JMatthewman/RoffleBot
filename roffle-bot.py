@@ -179,8 +179,18 @@ async def stats(ctx):
   claims = query('''SELECT COUNT(*) AS 'Total Claims', COUNT(DISTINCT user_id) AS 'Unique Users' FROM claims''')
   topSources = query('''SELECT source, COUNT(claim_id) FROM claims LEFT JOIN tickets ON claims.ticket_id = tickets.ticket_id GROUP BY source ORDER BY COUNT(claim_id) DESC LIMIT 10''')
   
-  multiTable = tabulate(multiUsage, ['Code', 'Uses'], tablefmt="grid")
-  await ctx.reply(f"`{multiTable}`")
+  multiTable = tabulate(multiUsage, ['Code', 'Claims'], tablefmt="grid")
+  sourceTable = tabulate(topSources, ['Source', 'Claims'], tablefmt="grid")
+
+  statsText = f"*Total Tickets Claimed:*\n"
+  statsText += f"{claims['Total Claims']}\n\n"
+  statsText += f"*Unique Participants:*\n"
+  statsText += f"{claims['Unique Users']}\n\n"
+  statsText += f"*Multi-Use Code Claims:\n"
+  statsText += f"`{multiTable}`\n\n"
+  statsText += f"*Top Sources Claims:\n"
+  statsText += f"`{sourceTable}`\n\n"
+  await ctx.reply(statsText)
 
 @bot.command()
 @commands.has_any_role(*admin_roles)
