@@ -196,8 +196,7 @@ async def stats(ctx):
 @commands.cooldown(1, 600, commands.BucketType.channel)
 async def leaderboard(ctx):
 
-  leaderData = query('''SELECT user_id, COUNT(*) from claims GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 10''')
-  leaderData = [row['user_id'] = f"<@{row['user_id']}>]" for row in leaderData]
+  leaderData = query('''SELECT user_name, COUNT(*) from claims GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 10''')
   leaderTable = tabulate(leaderData, ['User', 'Tickets', 'tag'], tablefmt="github", showindex=[i for i in range(1,11)])
  
   leaderboardText = f"**Current leaderboard:**\n"
