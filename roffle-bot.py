@@ -197,7 +197,7 @@ async def stats(ctx):
 async def announceWinners(ctx):
   winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
-  winnersDict = []
+  winnersDict = {}
   for winner in winners:
     my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
     winnersDict.append(my_dict)
