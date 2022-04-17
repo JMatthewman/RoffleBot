@@ -197,18 +197,18 @@ async def stats(ctx):
 async def announceWinners(ctx):
   winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
-  winnersDict = []
+  winnersDict = {}
   for winner in winners:
     my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
     winnersDict.append(my_dict)
-  winnerTable = tabulate(winnersDict, headers=winnersDict[0].keys(), tablefmt="github")
+  winnerTable = tabulate(winnersDict, headers=['Winner', 'Prize'], tablefmt="github")
   await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n{winnerTable}")
 
 
 @bot.command()
 @commands.has_any_role(*admin_roles)
 async def notifyWinners(ctx):
-  winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winner.prize_id = prize.prizes_id JOIN claims on winner.claim_id = claims.claim_id")
+  winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
   for win in winners:
     winner = get_user(win['user_id'])
