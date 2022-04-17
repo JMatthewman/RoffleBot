@@ -201,7 +201,7 @@ async def announceWinners(ctx):
   for winner in winners:
     my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
     winnersDict.append(my_dict)
-  rows = [x.values() for x in my_dict]
+  rows = [x.values() for x in winnersDict]
   winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
   await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n{winnerTable}")
 
