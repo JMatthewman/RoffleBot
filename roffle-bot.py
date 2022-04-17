@@ -211,8 +211,7 @@ async def notifyWinners(ctx):
   winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
   for win in winners:
-    logging.info(f"Looking for user '{win['user_id']}'")
-    winner = bot.get_user(win['user_id'])
+    winner = bot.fetch_user(win['user_id'])
     await winner.send(f"Congratulations <@{winners['user_id']}, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.`")
 
 
