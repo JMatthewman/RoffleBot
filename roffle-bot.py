@@ -193,6 +193,18 @@ async def stats(ctx):
   await ctx.reply(statsText)
 
 @bot.command()
+@commands.cooldown(1, 600, commands.BucketType.channel)
+async def leaderboard(ctx):
+
+  leaderData = query('''SELECT user_id, COUNT(*) from claims GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 10''')
+  leaderData = [row['user_id'] = f"<@{row['user_id']}>]" for row in leaderData]
+  leaderTable = tabulate(leaderData, ['User', 'Tickets', 'tag'], tablefmt="github", showindex=[i for i in range(1,11)])
+ 
+  leaderboardText = f"**Current leaderboard:**\n"
+  leaderboardText += f"`{leaderTable}`"
+  await ctx.reply(leaderboardText)
+
+@bot.command()
 @commands.has_any_role(*admin_roles)
 async def create(ctx, count, *args):
   logging.info(f"Received request to generate new tickets from {ctx.author}")
