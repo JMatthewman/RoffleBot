@@ -43,7 +43,7 @@ cur = con.cursor()
 
 def query(query, parmeters=None):
   cur.execute(query, parameters)
-  return = cur.fetchall()
+  return cur.fetchall()
 
 def createMultiList():
   """ Function to fetch the allowed list of multi codes from the database """
