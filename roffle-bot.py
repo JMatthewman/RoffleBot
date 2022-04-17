@@ -187,9 +187,9 @@ async def stats(ctx):
   statsText += f"**Unique Participants:**\n"
   statsText += f"{claims[0]['Unique Users']}\n\n"
   statsText += f"**Multi-Use Code Claims:**\n"
-  statsText += f"`{multiTable}`\n\n"
+  statsText += f"```{multiTable}```\n\n"
   statsText += f"**Top Claim Sources:**\n"
-  statsText += f"`{sourceTable}`"
+  statsText += f"```{sourceTable}```"
   await ctx.reply(statsText)
 
 @bot.command()
@@ -203,7 +203,7 @@ async def announceWinners(ctx):
     winnersDict.append(my_dict)
   rows = [x.values() for x in winnersDict]
   winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
-  await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n{winnerTable}")
+  await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n```{winnerTable}```")
 
 
 @bot.command()
@@ -224,7 +224,7 @@ async def leaderboard(ctx):
   leaderTable = tabulate(leaderData, ['Rank','User', 'Tickets'], tablefmt="github", showindex=[i for i in range(1,len(leaderData)+1)])
  
   leaderboardText = f"**Current leaderboard:**\n"
-  leaderboardText += f"`{leaderTable}`"
+  leaderboardText += f"```{leaderTable}```"
   await ctx.reply(leaderboardText)
 
 @bot.command()
