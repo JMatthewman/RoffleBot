@@ -193,6 +193,27 @@ async def stats(ctx):
   await ctx.reply(statsText)
 
 @bot.command()
+@commands.has_any_role(*admin_roles)
+async def announceWinners(ctx):
+  winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winners.prize_id = prize.prize_id JOIN claims on winners.claim_id = claims.claim_id")
+
+  for winner in winners:
+    winner['user_id'] = f"<@{winner['user_id']}>"
+  winnerTable = tabulate(winners, ['Winner', 'Prize'], tablefmt="github")
+  await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n{winnerTable}")
+
+
+@bot.command()
+@commands.has_any_role(*admin_roles)
+async def notifyWinners(ctx):
+  winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winners.prize_id = prize.prize_id JOIN claims on winners.claim_id = claims.claim_id")
+
+  for win in winners:
+    winner = get_user(win['user_id'])
+    await winner.send(f"Congratulations <@{winners['user_id']}, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.`")
+
+
+@bot.command()
 @commands.cooldown(1, 600, commands.BucketType.channel)
 async def leaderboard(ctx):
 
