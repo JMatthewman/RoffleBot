@@ -360,25 +360,6 @@ async def raffle_error(ctx, error):
   else:
     raise error
 
-
-@bot.command(name="oprah", aliases=['oprah.gif'])
-@commands.has_any_role(*admin_roles)
-async def oprah(ctx, *args):
-  reason = ' '.join(args)
-  users = set()
-  async for message in ctx.channel.history():
-    users.add(message.author)
-
-  for user in users:
-    newCode = create_code()
-    cur.execute('INSERT INTO tickets (code, source, multi_use, created) VALUES (:code, :source, 0, CURRENT_TIMESTAMP)', {"code": newCode.lower(), "source": f"Gifted by {ctx.author} for `{reason}`"})
-    con.commit()
-    result = claimTicket(newCode, user)
-    reply = await ctx.reply(f"Gifted <@{user.id}> a raffle ticket for `{reason}`.{tidySuffix}")
-  if TIDY:
-    await ctx.message.delete(delay=10)
-    await reply.delete(delay=10)
-
 @bot.command()
 @commands.has_any_role(*admin_roles)
 async def ping(ctx):
