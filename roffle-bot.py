@@ -279,9 +279,8 @@ async def pet_rofflebot(ctx):
   choices = ['teehehehehehhe', 'ooooohhhhh mooommmyyy', 'me likely', 'sscrrattcchheessss']
   await ctx.reply(random.choice(choices))
 @pet_rofflebot.error
-async def pet_rofflebot_error(ctx, error):
-  if isinstance(error, commands.MissingRole):
-    await ctx.reply("No touchy the RoffleBot.")
+async def petrofflebot_error(ctx, error):
+  await ctx.reply("No touchy the RoffleBot.")
     
 @bot.command()
 @commands.has_any_role(*admin_roles)
