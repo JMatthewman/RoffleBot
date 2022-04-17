@@ -280,7 +280,8 @@ async def pet_rofflebot(ctx):
   await ctx.reply(random.choice(choices))
 @pet_rofflebot.error
 async def petrofflebot_error(ctx, error):
-  await ctx.reply("No touchy the RoffleBot.")
+  choices = ['No touchy the RoffleBot.', 'Have you heard of consent?', 'botty going to bitey you', 'YOU ARE NOT MY MUMMY.']
+  await ctx.reply(random.choice(choices))
     
 @bot.command()
 @commands.has_any_role(*admin_roles)
