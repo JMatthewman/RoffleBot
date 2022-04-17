@@ -182,13 +182,13 @@ async def stats(ctx):
   multiTable = tabulate(multiUsage, ['Code', 'Claims'], tablefmt="grid")
   sourceTable = tabulate(topSources, ['Source', 'Claims'], tablefmt="grid")
 
-  statsText = f"*Total Tickets Claimed:*\n"
+  statsText = f"**Total Tickets Claimed:**\n"
   statsText += f"{claims[0]['Total Claims']}\n\n"
-  statsText += f"*Unique Participants:*\n"
+  statsText += f"**Unique Participants:**\n"
   statsText += f"{claims[0]['Unique Users']}\n\n"
-  statsText += f"*Multi-Use Code Claims:\n"
+  statsText += f"**Multi-Use Code Claims:**\n"
   statsText += f"`{multiTable}`\n\n"
-  statsText += f"*Top Sources Claims:\n"
+  statsText += f"**Top Claim Sources:**\n"
   statsText += f"`{sourceTable}`\n\n"
   await ctx.reply(statsText)
 
