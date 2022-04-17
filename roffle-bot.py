@@ -273,7 +273,7 @@ async def listmulti(ctx):
   createMultiList()
   await ctx.reply(multi)
     
-@bot.command()
+@bot.command(name='pet_rofflebot', aliases=['ruffle_rofflebot', 'tickle_bot'])
 @commands.has_any_role(*admin_roles) 
 async def pet_rofflebot(ctx):
   choices = ['teehehehehehhe', 'ooooohhhhh mooommmyyy', 'me likely', 'sscrrattcchheessss']
