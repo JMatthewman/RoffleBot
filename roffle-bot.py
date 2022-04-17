@@ -8,6 +8,7 @@ import csv
 import io
 import logging
 from logging.handlers import TimedRotatingFileHandler
+from tabulate import tabulate
 
 logFormat = logging.Formatter('%(asctime)s : %(levelname)s :: %(message)s')
 rootLogger = logging.getLogger()
@@ -39,6 +40,10 @@ admin_roles = os.getenv("ADMIN_ROLES").split(',')
 con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
 cur = con.cursor()
+
+def query(query, parameters={}):
+  cur.execute(query, parameters)
+  return cur.fetchall()
 
 def createMultiList():
   """ Function to fetch the allowed list of multi codes from the database """
@@ -166,6 +171,37 @@ async def checktickets(ctx):
   if TIDY:
     await ctx.message.delete(delay=10)
     await reply.delete(delay=10)
+
+@bot.command()
+@commands.has_any_role(*admin_roles)
+async def stats(ctx):
+  multiUsage = query('''SELECT code, (SELECT COUNT(*) FROM claims WHERE claims.ticket_id = tickets.ticket_id) AS 'Uses' from "tickets" WHERE multi_use = 1''')
+  claims = query('''SELECT COUNT(*) AS 'Total Claims', COUNT(DISTINCT user_id) AS 'Unique Users' FROM claims''')
+  topSources = query('''SELECT source, COUNT(claim_id) FROM claims LEFT JOIN tickets ON claims.ticket_id = tickets.ticket_id GROUP BY source ORDER BY COUNT(claim_id) DESC LIMIT 10''')
+  
+  multiTable = tabulate(multiUsage, ['Code', 'Claims'], tablefmt="github")
+  sourceTable = tabulate(topSources, ['Source', 'Claims'], tablefmt="github")
+
+  statsText = f"**Total Tickets Claimed:**\n"
+  statsText += f"{claims[0]['Total Claims']}\n\n"
+  statsText += f"**Unique Participants:**\n"
+  statsText += f"{claims[0]['Unique Users']}\n\n"
+  statsText += f"**Multi-Use Code Claims:**\n"
+  statsText += f"`{multiTable}`\n\n"
+  statsText += f"**Top Claim Sources:**\n"
+  statsText += f"`{sourceTable}`"
+  await ctx.reply(statsText)
+
+@bot.command()
+@commands.cooldown(1, 600, commands.BucketType.channel)
+async def leaderboard(ctx):
+
+  leaderData = query('''SELECT user_name, COUNT(*) from claims GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 10''')
+  leaderTable = tabulate(leaderData, ['Rank','User', 'Tickets'], tablefmt="github", showindex=[i for i in range(1,len(leaderData)+1)])
+ 
+  leaderboardText = f"**Current leaderboard:**\n"
+  leaderboardText += f"`{leaderTable}`"
+  await ctx.reply(leaderboardText)
 
 @bot.command()
 @commands.has_any_role(*admin_roles)
