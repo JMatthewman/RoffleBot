@@ -197,7 +197,7 @@ async def stats(ctx):
 async def leaderboard(ctx):
 
   leaderData = query('''SELECT user_name, COUNT(*) from claims GROUP BY user_id ORDER BY COUNT(*) DESC LIMIT 10''')
-  leaderTable = tabulate(leaderData, ['User', 'Tickets', 'tag'], tablefmt="github", showindex=[i for i in range(1,11)])
+  leaderTable = tabulate(leaderData, ['User', 'Tickets', 'tag'], tablefmt="github", showindex=[i for i in range(1,len(leaderData)+1)])
  
   leaderboardText = f"**Current leaderboard:**\n"
   leaderboardText += f"`{leaderTable}`"
