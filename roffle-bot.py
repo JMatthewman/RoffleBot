@@ -195,7 +195,7 @@ async def stats(ctx):
 @bot.command()
 @commands.has_any_role(*admin_roles)
 async def announceWinners(ctx):
-  winners = query("SELECT user_id, prize FROM winners JOIN prizes ON winners.prize_id = prize.prize_id JOIN claims on winners.claim_id = claims.claim_id")
+  winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prize.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
   for winner in winners:
     winner['user_id'] = f"<@{winner['user_id']}>"
@@ -206,7 +206,7 @@ async def announceWinners(ctx):
 @bot.command()
 @commands.has_any_role(*admin_roles)
 async def notifyWinners(ctx):
-  winners = query("SELECT user_id, prize, password FROM winners JOIN prizes ON winners.prize_id = prize.prize_id JOIN claims on winners.claim_id = claims.claim_id")
+  winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winner.prize_id = prize.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
   for win in winners:
     winner = get_user(win['user_id'])
