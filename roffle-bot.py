@@ -41,7 +41,7 @@ con = sqlite3.connect('roffleBot.db')
 con.row_factory = sqlite3.Row
 cur = con.cursor()
 
-def query(query, parameters=None):
+def query(query, parameters={}):
   cur.execute(query, parameters)
   return cur.fetchall()
 
