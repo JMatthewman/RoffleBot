@@ -127,7 +127,7 @@ def claimTicket(code, user):
     con.commit()
       
     userTickets = countUserTickets(user)
-    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets} ticket(s) in the raffle! Good luck!"
+    return f"You've succesfully claimed a ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets} ticket(s) in the raffle! Good luck!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
@@ -187,10 +187,39 @@ async def stats(ctx):
   statsText += f"**Unique Participants:**\n"
   statsText += f"{claims[0]['Unique Users']}\n\n"
   statsText += f"**Multi-Use Code Claims:**\n"
-  statsText += f"`{multiTable}`\n\n"
+  statsText += f"```{multiTable}```\n\n"
   statsText += f"**Top Claim Sources:**\n"
-  statsText += f"`{sourceTable}`"
+  statsText += f"```{sourceTable}```"
   await ctx.reply(statsText)
+
+@bot.command()
+@commands.has_any_role(*admin_roles)
+async def announceWinners(ctx):
+  winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
+
+  #winnersDict = []
+  #for winner in winners:
+  #  my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
+  #  winnersDict.append(my_dict)
+  #rows = [x.values() for x in winnersDict]
+  #winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
+  #await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n```{winnerTable}```")
+
+  announceText = "**Insomnia 68 BYOC Raffle Winners:**\n\n"
+  for winner in winners:
+    announceText += f"<@{winner['user_id']}> won `{winner['prize']}`\n"
+  await ctx.reply(announceText)
+
+
+@bot.command()
+@commands.has_any_role(*admin_roles)
+async def notifyWinners(ctx):
+  winners = query("SELECT user_id, prize, password FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
+
+  for win in winners:
+    winner = await bot.fetch_user(win['user_id'])
+    await winner.send(f"Congratulations <@{win['user_id']}>!, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.")
+
 
 @bot.command()
 @commands.cooldown(1, 600, commands.BucketType.channel)
@@ -200,7 +229,7 @@ async def leaderboard(ctx):
   leaderTable = tabulate(leaderData, ['Rank','User', 'Tickets'], tablefmt="github", showindex=[i for i in range(1,len(leaderData)+1)])
  
   leaderboardText = f"**Current leaderboard:**\n"
-  leaderboardText += f"`{leaderTable}`"
+  leaderboardText += f"```{leaderTable}```"
   await ctx.reply(leaderboardText)
 
 @bot.command()
