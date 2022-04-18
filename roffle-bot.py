@@ -207,7 +207,7 @@ async def announceWinners(ctx):
 
   announceText = "**Insomnia 68 BYOC Raffle Winners:**\n\n"
   for winner in winners:
-    announceText += f"<@{winner['user_id']} won `{winner['prize']}`\n"
+    announceText += f"<@{winner['user_id']}> won `{winner['prize']}`\n"
   await ctx.reply(announceText)
 
 
