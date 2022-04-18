@@ -127,7 +127,7 @@ def claimTicket(code, user):
     con.commit()
       
     userTickets = countUserTickets(user)
-    return f"You've succesfully claimed ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets} ticket(s) in the raffle! Good luck!"
+    return f"You've succesfully claimed a ticket `{tickets[0]['code']}` for {tickets[0]['source']}. You now have {userTickets} ticket(s) in the raffle! Good luck!"
   else:
     return f"Something went wrong trying to claim your ticket..."
 
@@ -197,13 +197,18 @@ async def stats(ctx):
 async def announceWinners(ctx):
   winners = query("SELECT user_id, prize FROM winner JOIN prizes ON winner.prize_id = prizes.prize_id JOIN claims on winner.claim_id = claims.claim_id")
 
-  winnersDict = []
+  #winnersDict = []
+  #for winner in winners:
+  #  my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
+  #  winnersDict.append(my_dict)
+  #rows = [x.values() for x in winnersDict]
+  #winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
+  #await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n```{winnerTable}```")
+
+  announceText = "**Insomnia 68 BYOC Raffle Winners:**\n\n"
   for winner in winners:
-    my_dict = {'user_tag': f"<@{winner['user_id']}>", 'prize': winner['prize']}
-    winnersDict.append(my_dict)
-  rows = [x.values() for x in winnersDict]
-  winnerTable = tabulate(rows, headers=['Winner', 'Prize'], tablefmt="github")
-  await ctx.reply(f"**Insomnia 68 BYOC Raffle Winners:**\n\n```{winnerTable}```")
+    announceText += f"<@{winner['user_id']} won `{winner['prize']}`\n"
+  await ctx.reply(announceText)
 
 
 @bot.command()
