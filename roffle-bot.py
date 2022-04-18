@@ -302,6 +302,21 @@ async def listmulti(ctx):
   createMultiList()
   await ctx.reply(multi)
     
+@bot.command(name='pet_rofflebot', aliases=['ruffle_rofflebot', 'tickle_bot'])
+@commands.has_any_role(*admin_roles) 
+async def pet_rofflebot(ctx):
+  choices = ['teehehehehehhe', 'ooooohhhhh mooommmyyy', 'me likely', 'sscrrattcchheessss']
+  reply = await ctx.reply(random.choice(choices))
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
+@pet_rofflebot.error
+async def petrofflebot_error(ctx, error):
+  choices = ['No touchy the RoffleBot.', 'Have you heard of consent?', 'botty going to bitey you', 'YOU ARE NOT MY MUMMY.']
+  reply = await ctx.reply(random.choice(choices))
+  if TIDY:
+    await ctx.message.delete(delay=10)
+    await reply.delete(delay=10)
     
 @bot.command()
 @commands.has_any_role(*admin_roles)
@@ -329,7 +344,7 @@ async def giftTicket_error(ctx, error):
   else:
     raise error
 
-@bot.command(name='raffle', aliases=['Raffle'])
+@bot.command(name='raffle', aliases=['Raffle', 'RAFFLE'])
 @commands.cooldown(COOLDOWN_LIMIT, COOLDOWN_TIME, commands.BucketType.user)
 async def raffle(ctx, code):
   logging.info(f"Received claim request for '{code}' from {ctx.author} ({ctx.author.id})")
@@ -373,6 +388,10 @@ async def ping(ctx):
 @bot.command()
 async def help(ctx):
   await ctx.reply("Taking part in the Insomnia Gaming Festival BYOC Raffle is super easy! \n Just say !raffle and then your code. Example: \n !raffle rafflesareawesome \n That's it! \n Happy Raffle ")
+
+@bot.command()
+async def when(ctx):
+  await ctx.reply("The raffle will be drawn at 12pm on Monday! \n The top prizes (such as Fifa 17) are drawn live, the rest on Discord. \n Winners will get a Discord messages straight from RoffleBot \n You must be at the event to claim. \n Happy Raffle ")
 
 
 @bot.command()
