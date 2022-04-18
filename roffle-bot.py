@@ -210,6 +210,17 @@ async def announceWinners(ctx):
     announceText += f"<@{winner['user_id']}> won `{winner['prize']}`\n"
   await ctx.reply(announceText)
 
+  with io.BytesIO() as buffer:
+    sb = io.TextIOWrapper(buffer, 'utf-8', newline='')
+    csv.writer(sb).writerow(['Raffle Code','Code Source'])
+    for code in codes:
+      csv.writer(sb).writerow([code,source])
+    sb.flush()
+    buffer.seek(0)
+    discoFile = discord.File(sb, filename=f'Raffle Codes - {source}.csv')
+    await ctx.author.send(f"Your {count} new raffle ticket codes for '{source}' are attached.{tidySuffix}", file=discoFile)
+
+
 
 @bot.command()
 @commands.has_any_role(*admin_roles)
@@ -218,8 +229,10 @@ async def notifyWinners(ctx):
 
   for win in winners:
     winner = await bot.fetch_user(win['user_id'])
-    await winner.send(f"Congratulations <@{win['user_id']}>!, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.")
-
+    try:
+      await winner.send(f"Congratulations <@{win['user_id']}>!, you have won `{win['prize']}` in the Insomnia 68 BYOC Raffle; You must be on-site at Insomnia68 and have a BYOC ticket to claim this prize. Please visit helpdesk, tell them you have won, and provide the password `{win['password']}` in order to claim your prize.")
+    except:
+      logging.error(f"Failed to message winner '{winner}' ({win['user_id']}) with prize '{win['prize']}")
 
 @bot.command()
 @commands.cooldown(1, 600, commands.BucketType.channel)
